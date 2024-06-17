@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Supply Chain Management Form</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+    <link rel="stylesheet" href="style1.css">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+
+
+    <script src="/s3.js"></script>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.5.22/dist/jspdf.plugin.autotable.js"></script>
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+
+
+    <h1>Welcome Back User !! Track Your Product here
+    </h1>
+
+    <div class="container">
+        <video autoplay muted loop id="myVideo">
+            <source src="cargo1.mp4" type="video/mp4">
+        </video>
+
+
+        <h3>Track Your Product</h3>
+        <form>
+            <div class="form-group">
+                <label for="product-id2">Enter Track ID of your Product :</label>
+                <input type="number" class="form-control" id="product-id2" placeholder="Enter product ID">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="getProduct()">Track Product</button>
+        </form>
+        <div style="color: white" id="product-info"></div>
+
+
+        <hr>
+
+
+
+        <h2>Generate Bill</h2>
+        <form>
+            <div class="form-group">
+                <label for="product-id2">Enter Product ID to Generate Bill:</label>
+                <input type="number" class="form-control" id="product-id1" placeholder="Enter product ID" min="0">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="createbills()">Create Bill</button>
+        </form>
+
+
+
+
+
+
+    </div>
+
+
+</body>
+
+</html>
