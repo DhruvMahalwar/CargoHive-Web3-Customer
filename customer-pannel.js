@@ -2,7 +2,7 @@
 async function getProduct() {
     try {
         if (typeof window.ethereum === 'undefined') {
-            alert('Kindly install MetaMask');
+            alert('Please install MetaMask to perform transactions on the blockchain, as this is a blockchain-based project.');
             return;
         }
 
@@ -30,7 +30,7 @@ async function getProduct() {
 async function createbills() {
     try {
         if (typeof window.ethereum === 'undefined') {
-            alert('Kindly install MetaMask');
+            alert('Please install MetaMask to perform transactions on the blockchain, as this is a blockchain-based project.');
             return;
         }
 
