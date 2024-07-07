@@ -1,266 +1,79 @@
-async function createProduct() {
-  var sendm=document.getElementById('cp');
-    const name = document.getElementById("name").value;
-    const manufacturer = document.getElementById("manufacturer").value;
-    const amount = document.getElementById("amount").value;
-    const quantity = document.getElementById("quantity").value;
-    const weight = document.getElementById("weight").value;
 
-     const accounts = await ethereum.request({
-      method: "eth_requestAccounts",
-    });
-     const tx = await contract.methods.createProduct(name, manufacturer, amount, quantity, weight).send({ from: accounts[0] });
-     const count = await contract.methods.productCount().call({ from: accounts[0] });
-     contract.methods.getProduct(count).call({ from: accounts[0] }).then(async result => {
-      console.log(result.sealHash);
-      sendm.seal.value=result.sealHash;
-      sendm.message.value="Your security key for check in in warehouse A is : ";
+async function getProduct() {
+    try {
+        if (typeof window.ethereum === 'undefined') {
+            alert('Kindly install MetaMask');
+            return;
+        }
 
-         // these IDs from the previous steps
-         emailjs.sendForm('service_z4khvvy', 'template_jn24wqw', sendm)
-         .then(function () {
-             console.log('SUCCESS!');
-          alert('Notification successfully sent')
-         }, function (error) {
-             console.log('FAILED...', error);
-         });
-    
-    });
-      ;
-
-  }
-
-
-
-
-   async function addHistory() {
-    const accounts = await ethereum.request({
-      method: "eth_requestAccounts",
-    });
-
-    const now = new Date();
-    const formattedDateTime = now.toLocaleString('en-GB' , {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    }); // format date and time as DD/MM/YYYY, HH:MM:SS
- 
- 
-    const productId = document.getElementById("productId").value;
-    const history = document.getElementById("history").value;
-    const myString = document.getElementById("hash").value;
-    const weight = document.getElementById("weight_check").value;
-
-    // const hexString = web3.utils.utf8ToHex(myString);
-    // const paddedHexString = web3.utils.padRight(hexString, 64);
-
-    // const bytes32Value = web3.utils.hexToBytes(paddedHexString);
-    
-    const tx = await contract.methods.addHistory(productId, "The History was added on "+formattedDateTime+" "+"and "+history, myString, weight).send({ from: accounts[0] });
-    contract.methods.getProduct(productId).call({ from: accounts[0] }).then(async result => {
-      console.log(result.sealHash);
-    })
-  }
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-  async function getAllProducts() {
-    const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
+        const productId = document.getElementById("product-id2").value;
+        const accounts = await ethereum.request({
+            method: "eth_requestAccounts",
         });
-        contract.setProvider(ethereum)
- 
- 
-        const result = await contract.methods.getAllProducts().call({ from: accounts[0]});
-        console.log(result);
- 
- 
-        let html = "<table> <thead> <tr> <th>ID</th> <th>Name</th> <th>Manufacturer</th> <th>Amount</th> <th>Quantity</th> </tr> </thead> <tbody>";
-      
-      
-        for (let i = 0; i < result[0].length; i++) {
-          html += "<tr><td>" + result[0][i] + "</td><td>" + result[1][i] + "</td><td>" + result[2][i] + "</td><td>" + result[3][i] + "</td><td>" + result[4][i] + "</td></tr>";
+        const response = await contract.methods.getProduct(productId).call({ from: accounts[0] }).then(async result => {
+            console.log(result.sealHash);
+            const productInfoDiv = document.getElementById("product-info");
+            if (result[2].length === 0) {
+                productInfoDiv.innerHTML = `Product Name: ${result[0]}<br>Manufacturer: ${result[1]}<br>History: No history found.`;
+            } else {
+                productInfoDiv.innerHTML = `Product Name: ${result[0]}<br>Manufacturer: ${result[1]}<br>History: ${result.history.join(", ")}`;
+            }
+        });
+        console.log(response)
+    } catch (error) {
+        console.error(error);
+        alert('Please enter valid Product Id or try creating a product first.')
+    }
 }
 
- 
- 
-   html += "</tbody></table>";
-   console.log(html)
- 
- 
-   document.getElementById("productTable").innerHTML = html;
- }
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- async function getProductCount() {
-    const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-    });
-    contract.setProvider(ethereum)
- 
- 
-    const count = await contract.methods.productCount().call({ from: accounts[0] });
-    console.log(count);
-    // display the count on the webpage
-    document.getElementById("productCount").innerHTML = `Product Count: ${count}`;
- }
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- async function getProduct() {
-    const productId = document.getElementById("product-id2").value;
-    const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-    });
-    contract.methods.getProduct(productId).call({ from: accounts[0] }).then(async result => {
-        console.log(result.sealHash);
-        const productInfoDiv = document.getElementById("product-info");
-        if (result[2].length === 0) {
-            productInfoDiv.innerHTML = `Product Name: ${result[0]}<br>Manufacturer: ${result[1]}<br>History: No history found.`;
-        } else {
-            productInfoDiv.innerHTML = `Product Name: ${result[0]}<br>Manufacturer: ${result[1]}<br>History: ${result.history.join(", ")}`;
+
+async function createbills() {
+    try {
+        if (typeof window.ethereum === 'undefined') {
+            alert('Kindly install MetaMask');
+            return;
         }
-    });
- }
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- function displayProductHistory(product_id) {
-   
-    let product = getProduct(product_id);
-    if (product) {
-      let history = product.history;
-      if (history) {
-        console.log(`Transaction history for product ${product.id}:`);
-        history.forEach(transaction => {
-          console.log(`Transaction ID: ${transaction.transaction_id}, Date: ${transaction.date}, Quantity: ${transaction.quantity}, Price: ${transaction.price}`);
+
+        const doc = new jsPDF();
+        const productId = document.getElementById("product-id1").value;
+        const accounts = await ethereum.request({
+            method: "eth_requestAccounts",
         });
-      } else {
-        console.log(`No transaction history found for product ${product.id}.`);
-      }
-    } else {
-      console.log(`Product ${product_id} not found.`);
+        var rows = [];
+        const result = await contract.methods.getProduct(productId).call({ from: accounts[0] });
+        const totalAmount = result[2];
+        const quantity = result[3];
+        const unitPrice = totalAmount / quantity;
+        var amount = result[2].toString();
+        rows.push([result[0], quantity, unitPrice]);
+        doc.text("Bill Details", 10, 10);
+        doc.text("Manufacturer Name: " + result[1], 10, 20);
+        doc.autoTable({
+            startY: 30,
+            head: [["Product Name", "Quantity", "Unit Price"]],
+            body: rows,
+            theme: "grid",
+        });
+        doc.text(
+            "Total Amount: " + totalAmount,
+            10,
+            doc.autoTable.previous.finalY + 10
+        );
+        doc.save("bill.pdf");
+    } catch (error) {
+        console.error(error);
+        alert('Please enter valid Product Id or try creating a product first.');
     }
-  }
- 
- 
- 
- 
- 
- 
+}
 
 
 
 
-  async function createbills() {
-    const doc = new jsPDF();
-    const productId = document.getElementById("product-id1").value;
-    const accounts = await ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    var rows = [];
-    const result = await contract.methods.getProduct(productId).call({ from: accounts[0] });
-    const totalAmount = result[2];
-    const quantity = result[3];
-    const unitPrice = totalAmount / quantity;
-    var amount = result[2].toString();
-    rows.push([result[0], quantity, unitPrice]);
-     doc.text("Bill Details", 10, 10);
-    doc.text("Manufacturer Name: " + result[1], 10, 20);
-    doc.autoTable({
-      startY: 30,
-      head: [["Product Name", "Quantity", "Unit Price"]],
-      body: rows,
-      theme: "grid",
-    });
-    doc.text(
-      "Total Amount: " + totalAmount,
-      10,
-      doc.autoTable.previous.finalY + 10
-    );
-    doc.save("bill.pdf");
-  }
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- const web3 = new Web3(window.ethereum);
- const abi = [
+
+
+
+const web3 = new Web3(window.ethereum);
+const abi = [
     {
         "anonymous": false,
         "inputs": [
@@ -517,8 +330,8 @@ async function createProduct() {
         "stateMutability": "view",
         "type": "function"
     }
- ]
+]
 const contract = new web3.eth.Contract(
-  abi,
-  "0xc195cFf89749596E5bc58eAeE744521b874fBfE8"
+    abi,
+    "0xc195cFf89749596E5bc58eAeE744521b874fBfE8"
 );
